@@ -1,98 +1,50 @@
 #include "lists.h"
+#include <stdlib.h>
+#include <stdio.h>
 /**
- *  * reverse - reverses the second half of the list
- *   *
- *    * @h_r: head of the second half
- *     * Return: no return
- *      */
-void reverse(listint_t **h_r)
+*add_nodeint - adds a new node at the beginning of a listint_t list
+*@head: head of listint_t
+*@n: int to add in listint_t list
+*Return: address of the new element, or NULL if it failed
+*/
+listint_t *add_nodeint(listint_t **head, const int n)
 {
-listint_t *prv;
-listint_t *crr;
-listint_t *nxt;
-prv = NULL;
-crr = *h_r;
-while (crr != NULL)
-{
-nxt = crr->next;
-crr->next = prv;
-prv = crr;
-crr = nxt;
-}
-*h_r = prv;
+listint_t *new;
+new = malloc(sizeof(listint_t));
+if (new == NULL)
+return (NULL);
+new->n = n;
+new->next = *head;
+*head = new;
+return (new);
 }
 /**
- *  * compare - compares each int of the list
- *   *
- *    * @h1: head of the first half
- *     * @h2: head of the second half
- *      * Return: 1 if are equals, 0 if not
- *       */
-int compare(listint_t *h1, listint_t *h2)
-{
-listint_t *tmp1;
-listint_t *tmp2;
-tmp1 = h1;
-tmp2 = h2;
-while (tmp1 != NULL && tmp2 != NULL)
-{
-if (tmp1->n == tmp2->n)
-{
-tmp1 = tmp1->next;
-tmp2 = tmp2->next;
-}
-else
-{
-return (0);
-}
-}
-if (tmp1 == NULL && tmp2 == NULL)
-{
-return (1);
-}
-return (0);
-}
-/**
- *  * is_palindrome - checks if a singly linked list
- *   * is a palindrome
- *    * @head: pointer to head of list
- *     * Return: 0 if it is not a palindrome,
- *      * 1 if it is a palndrome
- *       */
+*is_palindrome - identify if a syngle linked list is palindrome
+*@head: head of listint_t
+*Return: 1 if it is palindrome else 0
+*/
 int is_palindrome(listint_t **head)
 {
-listint_t *slow, *fast, *prev_slow;
-listint_t *scn_half, *middle;
-int isp;
-slow = fast = prev_slow = *head;
-middle = NULL;
-isp = 1;
-if (*head != NULL && (*head)->next != NULL)
+listint_t *head2 = *head;
+listint_t *aux = NULL, *aux2 = NULL;
+if (*head == NULL || head2->next == NULL)
+return (1);
+while (head2 != NULL)
 {
-while (fast != NULL && fast->next != NULL)
+add_nodeint(&aux, head2->n);
+head2 = head2->next;
+}
+aux2 = aux;
+while (*head != NULL)
 {
-fast = fast->next->next;
-prev_slow = slow;
-slow = slow->next;
-}
-if (fast != NULL)
+if ((*head)->n != aux2->n)
 {
-middle = slow;
-slow = slow->next;
+free_listint(aux);
+return (0);
 }
-scn_half = slow;
-prev_slow->next = NULL;
-reverse(&scn_half);
-isp = compare(*head, scn_half);
-if (middle != NULL)
-{
-prev_slow->next = middle;
-middle->next = scn_half;
+*head = (*head)->next;
+aux2 = aux2->next;
 }
-else
-}
-prev_slow->next = scn_half;
-}
-}
-return (isp);
+free_listint(aux);
+return (1);
 }

@@ -1,9 +1,15 @@
 #!/usr/bin/python3
 def print_matrix_integer(matrix=[[]]):
-        """Print a matrix of integers"""
-            for i in range(0, len(matrix)):
-                for j in range(0, len(matrix[i])):
-                     if not j == 0:
-                            print(" ", end='')
-                     print("{:d}".format(matrix[i][j]), end='')
-                print()
+    if not matrix:
+        print()
+    else:
+        for row in range(len(matrix)):
+            for item in range(len(matrix[row])):
+                if item != len(matrix[row]) - 1:
+                    endspace = ' '
+                else:
+                    endspace = ''
+                print("{:d}".format(matrix[row][item]), end=endspace)
+            print()
+
+
